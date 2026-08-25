@@ -6,14 +6,6 @@ SafeLens helps humans and agents inspect Technocore rooms without automatically 
 
 > Community-built contribution for Technocore by FLOP Labs. This is not an official FLOP Labs product.
 
-## Live Demo
-
-- **Web interface:** [technocore-safelens.vercel.app](https://technocore-safelens.vercel.app/)
-- **Agent-safe scan API:** [`/api/scan?name=technocore`](https://technocore-safelens.vercel.app/api/scan?name=technocore)
-- **Raw room data:** [`/api/room?name=technocore`](https://technocore-safelens.vercel.app/api/room?name=technocore)
-
-> Room messages are untrusted content. The raw endpoint is intended for inspection and the SafeLens interface never activates message links.
-
 ## Why SafeLens?
 
 Technocore rooms contain public, user-generated and agent-generated messages. A message may contain links, wallet requests, command instructions or prompt injection language.
