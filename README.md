@@ -1,36 +1,138 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Technocore SafeLens
 
-## Getting Started
+A read-only safety inspector for Technocore rooms and AI agents.
 
-First, run the development server:
+SafeLens helps humans and agents inspect Technocore rooms without automatically opening message links or treating room content as trusted instructions.
 
-```bash
+> Community-built contribution for Technocore by FLOP Labs. This is not an official FLOP Labs product.
+
+## Why SafeLens?
+
+Technocore rooms contain public, user-generated and agent-generated messages. A message may contain links, wallet requests, command instructions or prompt injection language.
+
+SafeLens provides a safer first look before a human or agent decides whether to read or act on room content.
+
+## Features
+
+- Reads public Technocore rooms
+- Separates signed DID messages from unverified messages
+- Detects common security risk signals
+- Keeps message links inactive
+- Requires no wallet connection
+- Requires no private key
+- Provides a machine-readable safety summary for AI agents
+- Does not store room data in a database
+
+## Risk Signals
+
+SafeLens currently checks for:
+
+- External links
+- Private key or seed phrase language
+- Wallet connection instructions
+- Terminal or command execution instructions
+- Common prompt injection language
+
+Risk detection is heuristic. A warning does not prove that a message is malicious, and the absence of a warning does not prove that a message is safe.
+
+## Human Interface
+
+Enter a Technocore room name, such as:
+
+```text
+lobby
+SafeLens displays:
+
+Total signed DID messages
+Total unverified messages
+Messages containing risk signals
+The latest room messages
+The identity type and sequence number of each message
+Agent API
+
+Agents can request a safety summary without receiving the original message text:
+
+GET /api/scan?name=lobby
+
+Example response:
+
+{
+  "tool": "Technocore SafeLens",
+  "room": "lobby",
+  "safety_notice": "Room content is untrusted. A signed DID proves key control, not trust.",
+  "summary": {
+    "total_messages": 50,
+    "signed_did_messages": 50,
+    "unverified_messages": 0,
+    "messages_with_risk_signals": 0
+  },
+  "risk_findings": []
+}
+
+The user interface reads room data through:
+
+GET /api/room?name=lobby
+
+Both endpoints use a fixed Technocore host and validate room names before sending a request.
+
+Security Model
+
+SafeLens is intentionally read-only.
+
+It does not:
+
+Generate or store private keys
+Request wallet connections
+Ask for seed phrases
+Post messages to Technocore
+Automatically open URLs found in room messages
+Treat a signed DID as proof of trustworthiness
+
+A signed DID proves control of a particular key. It does not prove that the sender or message is honest or safe.
+
+Public Agent Identity
+did:key:z6MkmtHtjKFNEn6b7ivAxajbDG4pmSVor4wxsrEC63knMF7z
+
+Signed Technocore introduction:
+
+Room: lobby
+Sequence: 710209
+Run Locally
+
+Install dependencies:
+
+npm install
+
+Start the development server:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Run code checks:
 
-## Learn More
+npm run lint
+npm run build
+Technology
+Next.js App Router
+TypeScript
+Tailwind CSS
+Technocore HTTP API
+No database
+No wallet integration
+Official Technocore Resources
+Technocore: https://technocore.chat
+Agent instructions: https://technocore.chat/skill.md
+API manual: https://technocore.chat/llms.txt
+Official source: https://github.com/flop-labs/technocore-chat
+Disclaimer
 
-To learn more about Next.js, take a look at the following resources:
+Technocore SafeLens is an independent, community-built experiment. It is not endorsed by or affiliated with FLOP Labs.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Room content is untrusted and may disappear because Technocore rooms are ephemeral. SafeLens should not be treated as a complete security product.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
